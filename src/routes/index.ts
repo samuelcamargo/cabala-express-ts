@@ -1,9 +1,12 @@
-import { Application, Request, Response } from 'express';
+import express, { Request, Response } from "express";
+import { Express } from "express-serve-static-core";
+import cabala from "./CabalaRoutes";
 
-const routes = (app: Application): void => {
+
+const routes = (app: Express) => {
   app.route("/").get((req: Request, res: Response) => {
-    res.status(200).send("projeto node 30d - d3");
+    res.status(200).json("tudo ok");
   });
-};
-
+  app.use(express.json(), cabala);
+}
 export default routes;
