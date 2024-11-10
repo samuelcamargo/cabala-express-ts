@@ -99,6 +99,12 @@ Para garantir a integridade do projeto, você pode executar testes unitários e 
 - **Testes de integração** estão localizados em `__tests__/app.test.ts`, onde testamos as rotas e o comportamento geral da API.
 - **Testes unitários** para os controladores podem ser encontrados na pasta `__tests__/controllers/`.
 
+### Documentação da API com Swagger
+A API possui uma documentação interativa gerada automaticamente com o Swagger. Para acessar a documentação:
+
+1. Certifique-se de que o servidor está em execução.
+2. Acesse http://localhost:3000/api-docs no seu navegador para visualizar a documentação da API.
+
 ## Contribuição
 
 Sinta-se à vontade para fazer um fork do repositório e enviar pull requests com melhorias e novas funcionalidades. Toda contribuição é bem-vinda!
@@ -106,3 +112,5 @@ Sinta-se à vontade para fazer um fork do repositório e enviar pull requests co
 ## Licença
 
 Este projeto está sob a licença MIT. Consulte o arquivo `LICENSE` para obter mais detalhes.
+
+AXE!
