@@ -31,7 +31,7 @@ class CabalaController {
       });
     } catch {
       res.status(400).json({
-        mensagem: `Data incompativel`
+        mensagem: `Data incompatível`
       });
     }
   }
