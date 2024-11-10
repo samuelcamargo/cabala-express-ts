@@ -1,78 +1,53 @@
 import { orixas, Orixa } from "../models/OrixasModel";
 
 export default class CalculaCabalaController {
-  // Função que recalcula o valor se passar de 16.
-  static recalc16(valor: number): number {
-    return String(valor)
-      .split('')
-      .reduce((a, b) => Number(a) + Number(b), 0);
+
+  // Função que reduz um valor para um único dígito, se necessário.
+  static reduceToSingleDigit(value: number): number {
+    while (value > 16) {
+      value = String(value)
+        .split('')
+        .reduce((a, b) => Number(a) + Number(b), 0);
+    }
+    return value;
   }
 
+  // Obtém o nome do Orixá pelo ID ou retorna "N/A" se não encontrado.
   static getOrixaNameById(id: number): string {
     const orixa = orixas.find((o: Orixa) => o.id === id);
     return orixa ? orixa.name : "N/A";
   }
 
-  static calcula(
-    ano: number,
-    mes: number,
-    dia: number
-  ) {
-    // Separando os dígitos do dia
-    const n1 = Math.floor(dia / 10); // Primeiro dígito do dia
-    const n2 = dia % 10;             // Segundo dígito do dia
+  // Função principal para calcular os valores de cabala.
+  static calcula(ano: number, mes: number, dia: number) {
+    // Extrai os dígitos de dia, mês e ano.
+    const [n1, n2] = [Math.floor(dia / 10), dia % 10];
+    const [n3, n4] = [Math.floor(mes / 10), mes % 10];
+    const [n5, n6, n7, n8] = [
+      Math.floor(ano / 1000),
+      Math.floor((ano % 1000) / 100),
+      Math.floor((ano % 100) / 10),
+      ano % 10,
+    ];
 
-    // Separando os dígitos do mês
-    const n3 = Math.floor(mes / 10); // Primeiro dígito do mês
-    const n4 = mes % 10;             // Segundo dígito do mês
-
-    // Separando os dígitos do ano
-    const n5 = Math.floor(ano / 1000);              // Primeiro dígito do ano
-    const n6 = Math.floor((ano % 1000) / 100);      // Segundo dígito do ano
-    const n7 = Math.floor((ano % 100) / 10);        // Terceiro dígito do ano
-    const n8 = ano % 10;                            // Quarto dígito do ano
-
-    // Somando os valores de acordo com a lógica do cálculo
-    let soma1 = n1 + n3 + n5 + n7;
-    let soma2 = n2 + n4 + n6 + n8;
-
-    // Recalculando valores maiores que 16
-    if (soma1 > 16) {
-      soma1 = this.recalc16(soma1);
-    }
-    if (soma2 > 16) {
-      soma2 = this.recalc16(soma2);
-    }
+    // Calcula somas e reduz para valores de 1 a 16.
+    const soma1 = this.reduceToSingleDigit(n1 + n3 + n5 + n7);
+    const soma2 = this.reduceToSingleDigit(n2 + n4 + n6 + n8);
 
     const dinheiro = `${soma1} - ${this.getOrixaNameById(soma1)}`;
     const pessoas = `${soma2} - ${this.getOrixaNameById(soma2)}`;
 
-    // Cálculo do Coração
-    let somaCoracao = soma1 + soma2;
-    if (somaCoracao > 16) {
-      somaCoracao = this.recalc16(somaCoracao);
-    }
+    // Calcula o valor do Coração, Racional, Destino e Fé.
+    const somaCoracao = this.reduceToSingleDigit(soma1 + soma2);
     const coracao = `${somaCoracao} - ${this.getOrixaNameById(somaCoracao)}`;
 
-    // Cálculo do Racional
-    let somaRacional = soma1 + soma2 + somaCoracao;
-    if (somaRacional > 16) {
-      somaRacional = this.recalc16(somaRacional);
-    }
+    const somaRacional = this.reduceToSingleDigit(soma1 + soma2 + somaCoracao);
     const racional = `${somaRacional} - ${this.getOrixaNameById(somaRacional)}`;
 
-    // Cálculo do Destino
-    let somaDestino = soma1 + soma2 + somaCoracao + somaRacional;
-    if (somaDestino > 16) {
-      somaDestino = this.recalc16(somaDestino);
-    }
+    const somaDestino = this.reduceToSingleDigit(soma1 + soma2 + somaCoracao + somaRacional);
     const destino = `${somaDestino} - ${this.getOrixaNameById(somaDestino)}`;
 
-    // Cálculo da Fé
-    let somaFe = n1 + n2 + n3 + n4 + n5 + n6 + n7 + n8;
-    if (somaFe > 16) {
-      somaFe = this.recalc16(somaFe);
-    }
+    const somaFe = this.reduceToSingleDigit(n1 + n2 + n3 + n4 + n5 + n6 + n7 + n8);
     const fe = `${somaFe} - ${this.getOrixaNameById(somaFe)}`;
 
     return {
@@ -81,7 +56,7 @@ export default class CalculaCabalaController {
       coracao,
       racional,
       destino,
-      fe
+      fe,
     };
   }
 }
