@@ -1,5 +1,6 @@
 import express from "express";
 import CabalaController from "../controllers/CabalaControlle";
+import validateDateMiddleware from "../middlewares/validateDateMiddleware";
 
 const routes = express.Router();
 
@@ -81,6 +82,6 @@ routes.get("/cabala/:id", (req, res) => CabalaController.getOrixaNameById(req, r
  *       400:
  *         description: Data incompatível.
  */
-routes.post("/cabala", CabalaController.calculaCabala);
+routes.post("/cabala", validateDateMiddleware, CabalaController.calculaCabala);
 
 export default routes;
