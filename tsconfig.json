@@ -6,7 +6,9 @@
     "rootDir": "./src", // Diretório raiz do código TypeScript
     "strict": true, // Ativa verificação estrita
     "esModuleInterop": true, // Necessário para compatibilidade com módulos CommonJS
-    "skipLibCheck": true // Opcional, para ignorar checagens de tipo em arquivos de definição de tipos
+    "skipLibCheck": true, // Opcional, para ignorar checagens de tipo em arquivos de definição de tipos
+    "emitDecoratorMetadata": true,
+    "experimentalDecorators": true,
   },
   "include": [
     "src/**/*"
