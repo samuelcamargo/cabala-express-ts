@@ -1,7 +1,7 @@
 import 'reflect-metadata';
 import { config } from 'dotenv';
 import app from './app';
-import { connectDatabase } from '../database.ts'; // Módulo de conexão com o banco de dados
+import { connectDatabase } from './database'; // Módulo de conexão com o banco de dados
 import swaggerConfig from './swaggerConfig';
 import swaggerUi from 'swagger-ui-express';
 import swaggerJsDoc from 'swagger-jsdoc';
