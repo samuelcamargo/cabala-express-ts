@@ -11,17 +11,21 @@ A estrutura do projeto é organizada da seguinte forma:
 cabala-express/
 ├── src/
 │   ├── controllers/         # Controladores que contêm a lógica de cada rota
-│   ├── routes/              # Definição das rotas da API
+│   ├── middlewares/         # Middlewares para validações e outras operações intermediárias
 │   ├── models/              # Modelos de dados e configurações
+│   ├── repositories/        # Repositórios para comunicação com o banco de dados
+│   ├── routes/              # Definição das rotas da API
+│   ├── seeds/               # Scripts para popular o banco de dados com dados iniciais
+│   ├── services/            # Serviços utilitários e lógicas auxiliares
 │   ├── app.ts               # Configuração principal do aplicativo Express
 │   └── server.ts            # Arquivo de inicialização do servidor
+├── db/                      # Banco de dados SQLite
 ├── __tests__/               # Testes unitários e de integração
-│   ├── app.test.ts          # Teste de integração para o servidor
-│   └── controllers/         # Testes dos controladores
 ├── .env                     # Arquivo de variáveis de ambiente
 ├── .gitignore               # Arquivos e pastas ignorados pelo Git
 ├── jest.config.js           # Configuração do Jest para TypeScript
 ├── package.json             # Dependências e scripts do projeto
+├── README.md                # Documentação do projeto
 └── tsconfig.json            # Configuração do TypeScript
 ```
 
@@ -49,7 +53,22 @@ Antes de iniciar, certifique-se de que você tenha o **Node.js** e o **npm** ins
 4. Crie um arquivo `.env` na raiz do projeto com as variáveis de ambiente necessárias. Exemplo:
    ```env
    PORT=3000
+   DATABASE_URL=./db/database.sqlite
    ```
+
+## Configuração do Banco de Dados
+
+1. **Configuração do SQLite**:
+   O projeto utiliza SQLite como banco de dados. O arquivo do banco de dados (`database.sqlite`) será criado automaticamente no diretório `db` quando as migrações e seeds forem executadas.
+
+2. **Executando Seeds**:
+   Para popular o banco de dados com os dados iniciais (informações sobre os Orixás), execute o seguinte comando:
+
+   ```bash
+   npm run seed
+   ```
+
+   Esse comando executará o script `src/runSeed.ts`, que utiliza os dados definidos nos arquivos de seed para preencher as tabelas no banco de dados.
 
 ## Scripts Disponíveis
 
@@ -60,6 +79,7 @@ No `package.json`, existem scripts configurados para facilitar o desenvolvimento
 - **`npm start`**: Inicia o servidor em modo de produção usando os arquivos compilados na pasta `dist`.
 - **`npm test`**: Executa os testes com **Jest**.
 - **`npm run test:watch`**: Executa os testes no modo de observação, reiniciando-os automaticamente quando há mudanças.
+- **`npm run seed`**: Popula o banco de dados com dados iniciais, executando o script de seeds.
 
 ## Executando o Projeto
 

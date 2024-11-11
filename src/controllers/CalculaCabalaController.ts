@@ -1,7 +1,7 @@
-import { orixas, Orixa } from "../models/OrixasModel";
+import { getRepository } from "typeorm";
+import { Orixa } from "../entities/Orixa";
 
 export default class CalculaCabalaController {
-
   // Função que reduz um valor para um único dígito, se necessário.
   static reduceToSingleDigit(value: number): number {
     while (value > 16) {
@@ -13,13 +13,14 @@ export default class CalculaCabalaController {
   }
 
   // Obtém o nome do Orixá pelo ID ou retorna "N/A" se não encontrado.
-  static getOrixaNameById(id: number): string {
-    const orixa = orixas.find((o: Orixa) => o.id === id);
+  static async getOrixaNameById(id: number): Promise<string> {
+    const orixaRepository = getRepository(Orixa);
+    const orixa = await orixaRepository.findOne({ where: { id } });
     return orixa ? orixa.name : "N/A";
   }
 
   // Função principal para calcular os valores de cabala.
-  static calcula(ano: number, mes: number, dia: number) {
+  static async calcula(ano: number, mes: number, dia: number) {
     // Extrai os dígitos de dia, mês e ano.
     const [n1, n2] = [Math.floor(dia / 10), dia % 10];
     const [n3, n4] = [Math.floor(mes / 10), mes % 10];
@@ -34,21 +35,21 @@ export default class CalculaCabalaController {
     const soma1 = this.reduceToSingleDigit(n1 + n3 + n5 + n7);
     const soma2 = this.reduceToSingleDigit(n2 + n4 + n6 + n8);
 
-    const dinheiro = `${soma1} - ${this.getOrixaNameById(soma1)}`;
-    const pessoas = `${soma2} - ${this.getOrixaNameById(soma2)}`;
+    const dinheiro = `${soma1} - ${await this.getOrixaNameById(soma1)}`;
+    const pessoas = `${soma2} - ${await this.getOrixaNameById(soma2)}`;
 
     // Calcula o valor do Coração, Racional, Destino e Fé.
     const somaCoracao = this.reduceToSingleDigit(soma1 + soma2);
-    const coracao = `${somaCoracao} - ${this.getOrixaNameById(somaCoracao)}`;
+    const coracao = `${somaCoracao} - ${await this.getOrixaNameById(somaCoracao)}`;
 
     const somaRacional = this.reduceToSingleDigit(soma1 + soma2 + somaCoracao);
-    const racional = `${somaRacional} - ${this.getOrixaNameById(somaRacional)}`;
+    const racional = `${somaRacional} - ${await this.getOrixaNameById(somaRacional)}`;
 
     const somaDestino = this.reduceToSingleDigit(soma1 + soma2 + somaCoracao + somaRacional);
-    const destino = `${somaDestino} - ${this.getOrixaNameById(somaDestino)}`;
+    const destino = `${somaDestino} - ${await this.getOrixaNameById(somaDestino)}`;
 
     const somaFe = this.reduceToSingleDigit(n1 + n2 + n3 + n4 + n5 + n6 + n7 + n8);
-    const fe = `${somaFe} - ${this.getOrixaNameById(somaFe)}`;
+    const fe = `${somaFe} - ${await this.getOrixaNameById(somaFe)}`;
 
     return {
       dinheiro,
