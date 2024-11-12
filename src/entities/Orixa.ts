@@ -8,7 +8,6 @@ export class Orixa {
   @Column()
   name!: string;
 
-
   @Column({ nullable: true })
   description!: string;
 }
