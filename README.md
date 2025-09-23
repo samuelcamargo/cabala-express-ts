@@ -119,6 +119,9 @@ Para garantir a integridade do projeto, você pode executar testes unitários e 
 - **Testes de integração** estão localizados em `__tests__/app.test.ts`, onde testamos as rotas e o comportamento geral da API.
 - **Testes unitários** para os controladores podem ser encontrados na pasta `__tests__/controllers/`.
 
+### PR Code Review
+Ao abrir uma PR o code review será realizado automaticamente
+
 ### Documentação da API com Swagger
 A API possui uma documentação interativa gerada automaticamente com o Swagger. Para acessar a documentação:
 
