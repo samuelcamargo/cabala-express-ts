@@ -1,0 +1,77 @@
+name: Cursor Code Review
+
+on:
+  pull_request:
+    types: [opened, synchronize, reopened, ready_for_review]
+
+jobs:
+  code-review:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      pull-requests: write
+    
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+          ref: ${{ github.event.pull_request.head.sha }}
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '18'
+          cache: 'npm'
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Install Cursor CLI
+        run: |
+          if ! command -v cursor-agent &> /dev/null; then
+            curl https://cursor.com/install -fsS | bash
+            echo "$HOME/.cursor/bin" >> $GITHUB_PATH
+          else
+            echo "Cursor CLI already installed"
+          fi
+
+      - name: Perform code review
+        timeout-minutes: 15
+        env:
+          CURSOR_API_KEY: ${{ secrets.CURSOR_API_KEY }}
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          cursor-agent --force --model "sonnet-4" --output-format=text --print "IMPORTANTE: TODOS os comentários devem ser feitos EXCLUSIVAMENTE em PORTUGUÊS BRASILEIRO. Nunca use inglês.
+
+          Você está operando em um GitHub Actions runner realizando revisão automatizada de código. O gh CLI está disponível e autenticado via GH_TOKEN. Você pode comentar em pull requests.
+
+          Contexto:
+          - Repositório: ${{ github.repository }}
+          - Número do PR: ${{ github.event.pull_request.number }}
+          - PR Head SHA: ${{ github.event.pull_request.head.sha }}
+          - PR Base SHA: ${{ github.event.pull_request.base.sha }}
+
+          Objetivos:
+          1) Revisar comentários de revisão existentes e responder 'resolvido' quando endereçado
+          2) Revisar o diff atual do PR e sinalizar apenas problemas claros e de alta severidade
+          3) Deixar comentários inline muito curtos (1-2 frases) apenas em linhas alteradas e um resumo breve no final
+
+          Procedimento:
+          - Obter comentários existentes: gh pr view --json comments
+          - Obter diff: gh pr diff
+          - Se um problema previamente reportado parece resolvido por mudanças próximas, responder: ✅ Este problema parece ter sido resolvido pelas mudanças recentes
+          - Evitar duplicatas: pular se feedback similar já existe nas mesmas linhas ou próximas
+
+          Regras de comentário (OBRIGATÓRIO PORTUGUÊS BRASILEIRO):
+          - Máximo 10 comentários inline total; priorizar os problemas mais críticos
+          - Um problema por comentário; colocar na linha exata alterada
+          - Tom natural, específico e acionável; não mencionar automatizado ou alta confiança
+          - Usar emojis: 🚨 Crítico 🔒 Segurança ⚡ Performance ⚠️ Lógica ✅ Resolvido ✨ Melhoria
+          - LINGUAGEM: SEMPRE em português brasileiro, nunca em inglês
+
+          Submissão:
+          - Submeter uma revisão contendo comentários inline mais um resumo conciso
+          - Usar apenas: gh pr review --comment
+          - Não usar: gh pr review --approve ou --request-changes
+          - RESUMO: Deve ser em português brasileiro"
