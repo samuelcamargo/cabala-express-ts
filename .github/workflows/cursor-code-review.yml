@@ -37,7 +37,7 @@ jobs:
           CURSOR_API_KEY: ${{ secrets.CURSOR_API_KEY }}
           GH_TOKEN: ${{ github.token }}
         run: |
-          cursor-agent --force --model "cursor-3.5" --output-format=text --print "Você está operando em um GitHub Actions runner realizando revisão automatizada de código. O gh CLI está disponível e autenticado via GH_TOKEN. Você pode comentar em pull requests.
+          cursor-agent --force --model "sonnet-4" --output-format=text --print "Você está operando em um GitHub Actions runner realizando revisão automatizada de código. O gh CLI está disponível e autenticado via GH_TOKEN. Você pode comentar em pull requests.
 
           Contexto:
           - Repositório: ${{ github.repository }}
