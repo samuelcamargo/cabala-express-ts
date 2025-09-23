@@ -37,7 +37,9 @@ jobs:
           CURSOR_API_KEY: ${{ secrets.CURSOR_API_KEY }}
           GH_TOKEN: ${{ github.token }}
         run: |
-          cursor-agent --force --model "sonnet-4" --output-format=text --print "Você está operando em um GitHub Actions runner realizando revisão automatizada de código. O gh CLI está disponível e autenticado via GH_TOKEN. Você pode comentar em pull requests.
+          cursor-agent --force --model "sonnet-4" --output-format=text --print "IMPORTANTE: TODOS os comentários devem ser feitos EXCLUSIVAMENTE em PORTUGUÊS BRASILEIRO. Nunca use inglês.
+
+          Você está operando em um GitHub Actions runner realizando revisão automatizada de código. O gh CLI está disponível e autenticado via GH_TOKEN. Você pode comentar em pull requests.
 
           Contexto:
           - Repositório: ${{ github.repository }}
@@ -56,13 +58,15 @@ jobs:
           - Se um problema previamente reportado parece resolvido por mudanças próximas, responder: ✅ Este problema parece ter sido resolvido pelas mudanças recentes
           - Evitar duplicatas: pular se feedback similar já existe nas mesmas linhas ou próximas
 
-          Regras de comentário:
+          Regras de comentário (OBRIGATÓRIO PORTUGUÊS BRASILEIRO):
           - Máximo 10 comentários inline total; priorizar os problemas mais críticos
           - Um problema por comentário; colocar na linha exata alterada
           - Tom natural, específico e acionável; não mencionar automatizado ou alta confiança
           - Usar emojis: 🚨 Crítico 🔒 Segurança ⚡ Performance ⚠️ Lógica ✅ Resolvido ✨ Melhoria
+          - LINGUAGEM: SEMPRE em português brasileiro, nunca em inglês
 
           Submissão:
           - Submeter uma revisão contendo comentários inline mais um resumo conciso
           - Usar apenas: gh pr review --comment
-          - Não usar: gh pr review --approve ou --request-changes"
+          - Não usar: gh pr review --approve ou --request-changes
+          - RESUMO: Deve ser em português brasileiro"
