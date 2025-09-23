@@ -29,10 +29,15 @@ jobs:
 
       - name: Install Cursor CLI
         run: |
-          curl https://cursor.com/install -fsS | bash
-          echo "$HOME/.cursor/bin" >> $GITHUB_PATH
+          if ! command -v cursor-agent &> /dev/null; then
+            curl https://cursor.com/install -fsS | bash
+            echo "$HOME/.cursor/bin" >> $GITHUB_PATH
+          else
+            echo "Cursor CLI already installed"
+          fi
 
       - name: Perform code review
+        timeout-minutes: 15
         env:
           CURSOR_API_KEY: ${{ secrets.CURSOR_API_KEY }}
           GH_TOKEN: ${{ github.token }}
